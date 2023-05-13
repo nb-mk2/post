@@ -2,7 +2,7 @@
 session_start();
 include('../connect.php');
 $a = $_POST['invoice'];
-$b = $_POST['product'];
+$b = $_POST['producto_id'];
 $c = $_POST['qty'];
 $w = $_POST['pt'];
 $date = $_POST['date'];

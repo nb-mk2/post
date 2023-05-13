@@ -35,6 +35,8 @@ POS
         padding: 9px 0;
       }
     </style>
+
+
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
 
 	<!-- combosearch box-->	
@@ -161,25 +163,16 @@ if($position=='admin') {
 <form action="incoming.php" method="post" >
 											
 <input type="hidden" name="pt" value="<?php echo $_GET['id']; ?>" />
-<input type="hidden" name="invoice" value="<?php echo $_GET['invoice']; ?>" />
-<select name="product" style="width:650px; "class="chzn-select" required>
-<option></option>
-	<?php
-	include('../connect.php');
-	$result = $db->prepare("SELECT * FROM products");
-		// $result->bindParam(':userid', $res);
-		$result->execute();
-		for($i=0; $row = $result->fetch(); $i++){
-	?>
-		<option value="<?php echo $row['product_id'];?>"><?php echo $row['product_code']; ?></option>
-	<?php
-				}
-			?>
-</select>
+<input type="hidden" name="invoice" value="<?php echo $_GET['invoice']; // product?>" />
+
+<input type="hidden" name="producto_id" id="producto_id">
+<input type="text" name="campo" id="campo"  style="width:650px; font-size: 24px; ">
 <input type="number" step = "any" min = ”0 ″ name="qty" value="1" min="1" placeholder="Qty" autocomplete="off" style="width: 68px; height:30px; padding-top:6px; padding-bottom: 4px; margin-right: 4px; font-size:15px;" / required>
 <input type="hidden" name="discount" value="" autocomplete="off" style="width: 68px; height:30px; padding-top:6px; padding-bottom: 4px; margin-right: 4px; font-size:15px;" />
-<input type="hidden" name="date" value="<?php echo date("m/d/y"); ?>" />
+<input type="hidden" name="date" value="<?php echo date("d/m/y"); ?>" />
 <Button type="submit" class="btn btn-info" style="width: 123px; height:35px; margin-top:-5px;" /><i class="icon-plus-sign icon-large"></i> Agregar</button>
+<ul  style="width: 650px; font-size: 24px; margin-bottom: 5px; " id="lista"></ul>
+
 </form>
 
 <table class="table table-bordered" id="resultTable" data-responsive="table">
@@ -305,6 +298,58 @@ if($position=='admin') {
 </div>
 </div>
 </div>
+<script>
+    document.getElementById("campo").addEventListener("keyup", getCodigos)
+
+    function getCodigos() {
+
+        let inputCP = document.getElementById("campo").value
+        let lista = document.getElementById("lista")
+
+        if (inputCP.length > 0) {
+
+            let url = "buscarinputAjax.php"
+            let formData = new FormData()
+            formData.append("campo", inputCP)
+
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                mode: "cors" //Default cors, no-cors, same-origin
+            }).then(response => response.json())
+                .then(data => {
+                    lista.style.display = 'block'
+                    lista.innerHTML = data
+                })
+                .catch(err => console.log(err))
+        } else {
+            lista.style.display = 'none'
+        }
+
+	
+    }
+
+	
+
+	function mostrar(cp , productCode) {
+    lista.style.display = 'none';
+    document.getElementById("producto_id").value = cp;
+	document.getElementById("campo").value = productCode;
+	}
+
+	document.getElementById("lista").addEventListener("mouseover", function(event) {
+    if (event.target && event.target.nodeName === "LI") {
+        event.target.style.backgroundColor = "yellow";
+    }
+		});
+
+		document.getElementById("lista").addEventListener("mouseout", function(event) {
+			if (event.target && event.target.nodeName === "LI") {
+				event.target.style.backgroundColor = "";
+			}
+		});
+
+  </script>
 </body>
 <?php include('footer.php');?>
 </html>
