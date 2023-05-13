@@ -130,6 +130,7 @@ background-repeat:no-repeat;
 </head>
 <body onLoad="document.getElementById('country').focus();">
 <form action="savesales.php" method="post">
+	
 <div id="ac">
 <center><h4><i class="icon icon-money icon-large"></i> Efectivo</h4></center><hr>
 <input type="hidden" name="date" value="<?php echo date("d/m/y"); ?>" />
@@ -170,14 +171,14 @@ if($asas=='credit') {
 }
 if($asas=='cash') {
 ?>
-<input type="number" name="cash" placeholder="Paga con" style="width: 268px; height:30px;  margin-bottom: 15px; margin-top: 20px;"  /><br>
+<input type="number" id="cash" name="cash" placeholder="Paga con" style="width: 268px; height:30px;  margin-bottom: 15px; margin-top: 20px;"  /><br>
 <?php
 }
 
 ?>
 
 &nbsp;
-<select  name="cuenta" required>
+<select  name="cuenta"  id="cuenta" required>
 <option></option>
 <option value="Pagado">Pagado</option>
 <option value="Presupuesto">Presupuesto</option>
@@ -187,6 +188,29 @@ if($asas=='cash') {
 </center>
 </div>
 </form>
+
+<script>
+  jQuery(document).ready(function($) {
+    $('#cuenta').change(function() {
+      handleSelectChange();
+    });
+    
+    function handleSelectChange() {
+      var select = document.getElementById("cuenta");
+      var cashInput = document.getElementById("cash");
+
+      if (select.value === "Pagado") {
+        cashInput.disabled = false;
+        cashInput.value = 0;
+      } else if (select.value === "Presupuesto") {
+        cashInput.disabled = true;
+        cashInput.value = "";
+      }
+    }
+  });
+</script>
+
 </body>
 <?php include('footer.php');?>
 </html>
+

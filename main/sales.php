@@ -13,6 +13,7 @@
     })
   })
 </script>
+
 <title>
 POS
 </title>
@@ -350,6 +351,7 @@ if($position=='admin') {
 		});
 
   </script>
+
 </body>
 <?php include('footer.php');?>
 </html>

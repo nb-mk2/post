@@ -26,13 +26,15 @@ apuntes para arreglar programa:
 *en el caso que se realice una venta, con el cliente presupuesto. No te tiene que dejar 
 avanzar cuando este en blanco. Ya que te lo toma como una venta 
 *controlar en el ingreso de datos, si esta repetido clientes, probeedores, materiales 
-*controlar los select, llenar las bd con muchos datos para poder testear bien  materiales y clientes
+*controlar los select, llenar las bd con muchos datos para poder testear bien  materiales y clientes (SOLUCIONADO)
 *mirar el tema de seleccion de clientes como indentificar que cuenta corriente presupuesto y pago efectivo 
 *mirar el tema de editar boletas de cuenta corriente cantidad, precio, unidad 
 *hacer una seguimiento a los pagos de los clientes por fecha. Cuanto va entregando cada uno
 *agregar un boton de cuotas al lado de cuenta corriente para ver los pagos realizados 
 *en el presupuesto de ventas se tiene que poder editar el precio por unidad y un boton para le sume 2%
 *en el modulo de materiales agregar un boton para que se pueda aumentar el precio de un producto al costado 2%
+*en el modulo de ventas podes agregar clientes sin perder la venta. O lo productos que agregaste! 
+
 
 
 

@@ -13,7 +13,7 @@ require_once('auth.php');
  <link href="css/bootstrap.css" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="css/DT_bootstrap.css">
-  
+
   <link rel="stylesheet" href="css/font-awesome.min.css">
     <style type="text/css">
       body {
@@ -71,29 +71,29 @@ function sum() {
             var result = parseInt(txtFirstNumberValue) - parseInt(txtSecondNumberValue);
             if (!isNaN(result)) {
                 document.getElementById('txt3').value = result;
-				
+
             }
-			
+
 			 var txtFirstNumberValue = document.getElementById('txt11').value;
             var result = parseInt(txtFirstNumberValue);
             if (!isNaN(result)) {
                 document.getElementById('txt22').value = result;				
             }
-			
+
 			 var txtFirstNumberValue = document.getElementById('txt11').value;
             var txtSecondNumberValue = document.getElementById('txt33').value;
             var result = parseInt(txtFirstNumberValue) + parseInt(txtSecondNumberValue);
             if (!isNaN(result)) {
                 document.getElementById('txt55').value = result;
-				
+
             }
-			
+
 			 var txtFirstNumberValue = document.getElementById('txt4').value;
 			 var result = parseInt(txtFirstNumberValue);
             if (!isNaN(result)) {
                 document.getElementById('txt5').value = result;
 				}
-			
+
         }
 </script>
 
@@ -150,13 +150,13 @@ window.onload=startclock;
 			<br><br><br><br><br><br>		
 			<li>
 			 <div class="hero-unit-clock">
-		
+
 			<form name="clock">
 			<font color="white">Hora: <br></font>&nbsp;<input style="width:150px;" type="submit" class="trans" name="face" value="">
 			</form>
 			  </div>
 			</li>
-				
+
 				</ul>             
           </div><!--/.well -->
         </div><!--/span-->
@@ -178,7 +178,7 @@ window.onload=startclock;
 				$result->execute();
 				$rowcount = $result->rowcount();
 			?>
-			
+
 			<?php 
 			include('../connect.php');
 				$result = $db->prepare("SELECT * FROM products where qty < 10 ORDER BY product_id DESC");
@@ -189,75 +189,19 @@ window.onload=startclock;
 				<div style="text-align:center;">
 			Total Cantidad de Materiales:  <font color="green" style="font:bold 22px 'Aleo';">[<?php echo $rowcount;?>]</font>
 			</div>
-			
-			
+
+
 </div>
 <a rel="facebox" href="addproduct.php"><Button type="submit" class="btn btn-info" style="float:right; width:230px; height:35px;" /><i class="icon-plus-sign icon-large"></i> Agregar Materiales</button></a>
 
 <!--<a  href="addporcen.php" rel="facebox"> <Button id="btnObtener" type="submit"  class="btn btn-primary" style="float:right; width:230px; height:35px;background: green;" /><i class="icon-plus-sign icon-large"></i> Aumentar por porcentaje</button></a> -->
 <div>
-	
+
 </div>
 <br><br>
 <br><br>
-<table class="table table-bordered" id="resultTablee" data-responsive="table" data-click-to-select="true" style="text-align: left;">
-	<thead>
-		<tr>
-			<th style="font-size:14px; color:green;" width="12%"> Nombre Materiales</th>
-			<th style="font-size:14px; color:green;" width="6%"> Precio de venta </th>
-			<th style="font-size:14px; color:green;" width="6%"> Accion </th>
-		</tr>
-	</thead>
-	<tbody >
-		
-			<?php
-			function formatMoney($number, $fractional=false) {
-					if ($fractional) {
-						$number = sprintf('%.2f', $number);
-					}
-					while (true) {
-						$replaced = preg_replace('/(-?\d+)(\d\d\d)/', '$1,$2', $number);
-						if ($replaced != $number) {
-							$number = $replaced;
-						} else {
-							break;
-						}
-					}
-					return $number;
-				}
-				include('../connect.php');
-				$result = $db->prepare("SELECT *, price * qty as total FROM products ORDER BY product_id DESC limit 2000");
-				$result->execute();
-				for($i=0; $row = $result->fetch(); $i++){
-				$total=$row['total'];
-				$availableqty=$row['qty'];
-				
-				echo '<tr class="record">';
-				
-			?>
-		
-			<td><?php echo $row['product_code']; ?></td>
-
-
-			<td>$<?php
-			$pprice=$row['price'];
-			echo formatMoney($pprice, true);
-			?></td>
-			<td><a rel="facebox hovered" title="Click para editar materiales" href="editproduct.php?id=<?php echo $row['product_id']; ?>"><button class="btn btn-warning"><i class="icon-edit"></i> </button> </a>
-			<a href="#" id="<?php echo $row['product_id']; ?>" class="delbutton" title="Click para eliminar materiales"><button class="btn btn-danger"><i class="icon-trash"></i></button></a></td>
-			</tr>
-			<?php
-				}
-			?>
-	</tbody>
-</table>
-
-
         <div class="container py-4 text-center">
-            <h2>Empleados</h2>
-
             <div class="row g-4">
-
                 <div class="col-auto">
                     <label for="num_registros" class="col-form-label">Mostrar: </label>
                 </div>
@@ -289,10 +233,10 @@ window.onload=startclock;
                 <div class="col">
                     <table class="table table-sm table-bordered table-striped">
                         <thead>
-                            <th class="sort asc">Num. empleado</th>
-                            <th class="sort asc">Nombre</th>
-                            <th class="sort asc">Apellido</th>
-                          
+                            <th class="sort asc">ID</th>
+                            <th class="sort asc">Descrip</th>
+                            <th class="sort asc">Precio</th>
+
                             <th></th>
                             <th></th>
                         </thead>
@@ -317,11 +261,23 @@ window.onload=startclock;
                 <input type="hidden" id="orderType" value="asc">
             </div>
         </div>
-    
+
 
     <script>
 
 
+
+
+    </script>
+
+
+<div class="clearfix"></div>
+</div>
+</div>
+</div>
+
+<script src="js/jquery.js"></script>
+  <script type="text/javascript">
 /* Llamando a la función getData() */
 getData();
 
@@ -365,8 +321,6 @@ function getData() {
             ' de ' + data.totalRegistros + ' registros';
         document.getElementById("nav-paginacion").innerHTML = data.paginacion;
 
-        // Aplicar la clase "hovered" nuevamente después de cargar los datos
-        applyHoveredClass();
         let container = document.getElementById("content");
 container.addEventListener("click", function(event) {
   if (event.target.classList.contains("rel")) {
@@ -377,16 +331,6 @@ container.addEventListener("click", function(event) {
     .catch(err => console.log(err));
 }
 
-function applyHoveredClass() {
-    let elements = document.getElementsByClassName("hovered");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("mouseover", facebox);
-    }
-}
-
-function facebox() {
-    // Código para abrir el modal utilizando Facebox
-}
 
 function nextPage(pagina) {
     document.getElementById('pagina').value = pagina;
@@ -417,62 +361,63 @@ function ordenar(e) {
     getData();
 }
 
-// Vincular eventos Facebox
-function bindFacebox() {
-    let elements = document.getElementsByClassName("rel");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("click", facebox);
-    }
-    
-    let relFace = document.getElementById("relface");
-    if (relFace) {
-        relFace.setAttribute("rel", "facebox");
-    }
+$(document).ready(function() {
+
+/* Llamando a la función getData() */
+getData();
+
+/* Escuchar un evento keyup en el campo de entrada y luego llamar a la función getData */
+$("#campo").on("keyup", function() {
+  getData();
+});
+
+$("#num_registros").on("change", function() {
+  getData();
+});
+
+/* Peticion AJAX */
+function getData() {
+  // ...
 }
-    </script>
 
-<a rel="facebox " title="Click para editar materiales" href="editproduct.php?id=1"><button class="btn btn-warning"><i class="icon-edit"></i> </button> </a>
-<div class="clearfix"></div>
-</div>
-</div>
-</div>
+function nextPage(pagina) {
+  // ...
+}
 
-<script src="js/jquery.js"></script>
-  <script type="text/javascript">
-$(function() {
+let columns = document.getElementsByClassName("sort");
+let tamanio = columns.length;
+for (let i = 0; i < tamanio; i++) {
+  columns[i].addEventListener("click", ordenar);
+}
 
+function ordenar(e) {
+  // ...
+}
 
-$(".delbutton").click(function(){
-
-//Save the link in a variable called element
-var element = $(this);
-
-//Find the id of the link that was clicked
-var del_id = element.attr("id");
-
-//Built a url to send
-var info = 'id=' + del_id;
- if(confirm("¿Seguro que quieres eliminar este producto?"))
-		  {
-
- $.ajax({
-   type: "GET",
-   url: "deleteproduct.php",
-   data: info,
-   success: function(){
+// Enlazar el evento click al contenedor principal
+$(document).on('click', '.delbutton', function() {
+    var del_id = $(this).attr("id");
+    var info = 'id=' + del_id;
+    var row = $(this).closest('tr'); // Obtener la fila padre (tr) que contiene el botón de eliminar
+    if (confirm("¿Seguro que quieres eliminar este producto?")) {
+        $.ajax({
+            type: "GET",
+            url: "deleteproduct.php",
+            data: info,
+            success: function() {
+                row.fadeOut('slow', function() {
+                    row.remove();
+                });
+            }
+        });
    
-   }
- });
-         $(this).parents(".record").animate({ backgroundColor: "#fbc7c7" }, "fast")
-		.animate({ opacity: "hide" }, "slow");
+    }
+    return false;
+});
 
- }
-
-return false;
 
 });
 
-});
 </script>
 
 <!-- JQUERY -->
@@ -505,7 +450,7 @@ return false;
 				          style:    'multi', //'os' para seleccion unica 
 				          selector: 'td:first-child'
 				      },
-           
+
                 language: {
                     processing: "Tratamiento en curso...",
                     search: "Buscar&nbsp;:",
@@ -528,25 +473,25 @@ return false;
                         sortDescending: ": active para ordenar la columna en orden descendente"
                     }
                 },
-                
+
                 lengthMenu: [ [20, 50, -1], [20, 50] ]
             });
 					          $('#btnObtener').on('click', function (event) {
 					   					 event.preventDefault();
 
-					    
+
 								    $('#resultTablee').find('input[type="hidden"]').remove();
 								    var seleccionados = table.rows({ selected: true });
-					    
+
 								    if(!seleccionados.data().length){
 								        $('<input>', {
 								          type: 'hidden',
 								          value: '',
 								          name: 'ids[]'
 								      }).appendTo('#resultTablee');
-								        
+
 								        $("#resultTablee").submit(); //submiteas el form
-								      
+
 								    }else{
 								      seleccionados.every(
 								        function(key, data){
@@ -557,7 +502,7 @@ return false;
 								            name: 'ids[]'
 								        }).appendTo('#resultTablee');
 
-					        
+
 					        $("#resultTablee").submit(); //submiteas el form
 					      }); 
 					    }
