@@ -8,7 +8,7 @@
     $result->bindParam(':userid', $id);
     $result->execute();
     $row = $result->fetch();
-    $precio = $row['price'] * 1.02;
+    $precio = ceil($row['price'] * 1.02);
 
     // Actualizar el precio en la base de datos
     $sql = "UPDATE products SET price = :precio WHERE product_id = :userid";

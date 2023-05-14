@@ -171,7 +171,7 @@ if($position=='admin') {
 <input type="number" step = "any" min = ”0 ″ name="qty" value="1" min="1" placeholder="Qty" autocomplete="off" style="width: 68px; height:30px; padding-top:6px; padding-bottom: 4px; margin-right: 4px; font-size:15px;"  required>
 <input type="hidden" name="discount" value="" autocomplete="off" style="width: 68px; height:30px; padding-top:6px; padding-bottom: 4px; margin-right: 4px; font-size:15px;" />
 <input type="hidden" name="date" value="<?php echo date("d/m/y"); ?>" />
-<Button type="submit" class="btn btn-info" style="width: 123px; height:35px; margin-top:-5px;" /><i class="icon-plus-sign icon-large"></i> Agregar</button>
+<Button type="submit" class="btn btn-info" style="width: 123px; height:35px; margin-top:-5px;" ><i class="icon-plus-sign icon-large"></i> Agregar</button>
 <ul  style="width: 650px; font-size: 24px; margin-bottom: 5px; " id="lista"></ul>
 
 </form>

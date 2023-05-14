@@ -200,10 +200,10 @@ if($asas=='cash') {
       var cashInput = document.getElementById("cash");
 
       if (select.value === "Pagado") {
-        cashInput.disabled = false;
+        cashInput.readOnly = false;
         cashInput.value = 0;
       } else if (select.value === "Presupuesto") {
-        cashInput.disabled = true;
+        cashInput.readOnly = true;
         cashInput.value = "";
       }
     }
