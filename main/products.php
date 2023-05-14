@@ -235,7 +235,7 @@ window.onload=startclock;
                         <thead>
                             <th class="sort asc">ID</th>
                             <th class="sort asc">Descrip</th>
-                            <th class="sort asc">Precio</th>
+                            <th class="sort asc precio">Precio</th>
 
                             <th></th>
                             <th></th>
@@ -412,6 +412,35 @@ $(document).on('click', '.delbutton', function() {
         });
    
     }
+    return false;
+});
+
+$(document).on('click', '.delbuttonPorcentaje', function() {
+    var del_id = $(this).attr("id");
+    var info = 'id=' + del_id;
+    var row = $(this).closest('tr'); // Obtener la fila padre (tr) que contiene el botón de eliminar
+    //if (confirm("¿QUIERES SUBIR EL PRECIO UN 2%?")) {
+        $.ajax({
+            type: "GET",
+            url: "subir_porcentaje.php",
+            data: info,
+            success: function(response) {
+                //console.log(response);
+                // Obtener el nuevo precio del producto desde la respuesta del servidor
+                var nuevoPrecio = parseFloat(response);
+               // console.log(nuevoPrecio);
+
+                // Obtener la celda de precio actual
+                var celdaPrecio = row.find('td:eq(2)');
+
+                // Actualizar el valor mostrado en la celda
+                celdaPrecio.text(nuevoPrecio.toFixed(2));
+
+    
+            }
+        });
+   
+   // }
     return false;
 });
 

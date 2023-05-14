@@ -99,6 +99,7 @@ if ($num_rows > 0) {
         $output['data'] .= '<td>' . $row['price'] . '</td>';
         $output['data'] .= '<td><a   title="Click para editar materiales" href="editproduct.php?id=' . $row['product_id'] . '"><button class="btn btn-warning"><i class="icon-edit"></i> </button> </a>
         <a href="#" id="'. $row['product_id'] .'"  class="delbutton" title="Click To Delete"><button class="btn btn-danger btn-mini"><i class="icon-trash"></i> Delete</button></a>
+        <a href="#" id="'. $row['product_id'] .'"  class="delbuttonPorcentaje " title="Click To Delete"><button class="btn btn-success btn-mini"> %2</button></a>
         </td>';
         $output['data'] .= '</tr>';
     }
