@@ -143,21 +143,10 @@ background-repeat:no-repeat;
 <input type="hidden" name="material" value="<?php echo $_GET['material']; ?>" />
 <center>
 
-<select name="product"   style="width:650px; color:ff0e6e;"class="chzn-select " required>
-<option></option>
-	<?php
-	include('../connect.php');
-	$result = $db->prepare("SELECT * FROM customer");
-		//$result->bindParam(':customer_id', $res);
-		$result->execute();
-		for($i=0; $row = $result->fetch(); $i++){
-	?>
-		<option value="<?php echo $row['customer_name'];?>"><?php echo $row['customer_name']; ?></option>
-	<?php
-				}
-			?>
 
-</select> 
+<input type="hidden" name="product" id="product"  >
+<input type="text" name="campo2" id="campo2"  style="width:650px; font-size: 24px; text-align: center; " placeholder="Ingrese Nombre Cliente" required>
+<ul  style="width: 650px; font-size: 24px; margin-bottom: 5px; " id="lista2"></ul>
 
 
 <!--
@@ -211,6 +200,60 @@ if($asas=='cash') {
       }
     }
   });
+
+  document.getElementById("campo2").addEventListener("keyup", getCodigos)
+
+    function getCodigos() {
+
+        let inputCP = document.getElementById("campo2").value
+        let lista2 = document.getElementById("lista2")
+
+        if (inputCP.length > 0) {
+
+            let url = "buscarinputAjaxCliente.php"
+            let formData = new FormData()
+            formData.append("campo2", inputCP)
+
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                mode: "cors" //Default cors, no-cors, same-origin
+            }).then(response => response.json())
+			.then(data => {
+					lista2.style.display = 'block'
+					if (data.length > 0) {
+						lista2.innerHTML = data;
+					} else {
+						lista2.innerHTML = "<li style=\"color: #000 !important;\">No se encontraron resultados</li>";
+					}
+				})
+                .catch(err => console.log(err))
+        } else {
+            lista2.style.display = 'none'
+        }
+
+	
+    }
+
+	
+
+	function mostrar(cp , productCode) {
+    lista2.style.display = 'none';
+    document.getElementById("product").value = cp;
+	document.getElementById("campo2").value = productCode; 
+	}
+
+	document.getElementById("lista2").addEventListener("mouseover", function(event) {
+    if (event.target && event.target.nodeName === "LI") {
+        event.target.style.backgroundColor = "yellow";
+    }
+		});
+
+		document.getElementById("lista2").addEventListener("mouseout", function(event) {
+			if (event.target && event.target.nodeName === "LI") {
+				event.target.style.backgroundColor = "";
+			}
+		});
 </script>
 
 </body>
