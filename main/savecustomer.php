@@ -5,6 +5,11 @@ $a = $_POST['name'];
 $b = $_POST['address'];
 $c = $_POST['contact'];
 $f = $_POST['note'];
+$pantalla2 = 0;
+$invoice2  = 0;
+$pantalla2=$_POST['pantalla2'];
+$invoice2 = $_POST['invoice2'];
+
 
 // validamos si el cliente ya existe
 $sql = "SELECT * FROM customer WHERE customer_name=:a OR contact=:c";
@@ -20,7 +25,13 @@ if ($q->rowCount() > 0) {
    $sql = "INSERT INTO customer (customer_name,address,contact,note) VALUES (:a,:b,:c,:f)";
    $q = $db->prepare($sql);
    $q->execute(array(':a'=>$a,':b'=>$b,':c'=>$c,':f'=>$f));
-   header("location: customer.php");
+
+   if ($pantalla2 <> 1) {
+      header("location: customer.php");
+   } else {
+      header("location: sales.php?id=cash&invoice=" . $invoice2); 
+   }
+ 
 }
 
 ?>

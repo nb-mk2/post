@@ -49,7 +49,7 @@ $html = "";
 
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     
-    $html .= "<li style=\"margin-bottom: 9px;\" onclick=\"mostrar('" . $row["product_id"] . "', '" . $row["product_code"] . "')\">" . $row["product_code"] . " - " . $row["product_id"] . "</li>";
+    $html .= "<li style=\"margin-bottom: 9px; color: #000 !important;\" onclick=\"mostrar('" . $row["product_id"] . "', '" . $row["product_code"] . "')\">" . $row["product_code"] . " - " . $row["product_id"] . "</li>";
     
 }
 

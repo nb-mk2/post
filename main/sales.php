@@ -160,7 +160,9 @@ if($position=='admin') {
 <div style="margin-top: -19px; margin-bottom: 21px;">
 <a  href="index.php"><button class="btn btn-default btn-large" style="float: none;"><i class="icon icon-circle-arrow-left icon-large"></i> Atras</button></a>
 </div>
-													
+
+<a rel="facebox" href="addcustomer.php?pt=<?php echo $_GET['id']?>&invoice=<?php echo $_GET['invoice']?>&pantalla=1"><Button type="submit" class="btn btn-info" style="float:right; width:230px; height:35px;" ><i class="icon-plus-sign icon-large"></i> Nuevo Cliente</button></a><br><br>													
+
 <form action="incoming.php" method="post" >
 											
 <input type="hidden" name="pt" value="<?php echo $_GET['id']; ?>" />
@@ -175,6 +177,8 @@ if($position=='admin') {
 <ul  style="width: 650px; font-size: 24px; margin-bottom: 5px; " id="lista"></ul>
 
 </form>
+
+
 
 <table class="table table-bordered" id="resultTable" data-responsive="table">
 	<thead>

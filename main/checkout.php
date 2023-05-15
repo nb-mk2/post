@@ -129,6 +129,7 @@ background-repeat:no-repeat;
 </style>	
 </head>
 <body onLoad="document.getElementById('country').focus();">
+
 <form action="savesales.php" method="post">
 	
 <div id="ac">
@@ -141,6 +142,7 @@ background-repeat:no-repeat;
 <input type="hidden" name="profit" value="<?php echo $_GET['totalprof']; ?>" />
 <input type="hidden" name="material" value="<?php echo $_GET['material']; ?>" />
 <center>
+
 <select name="product"   style="width:650px; color:ff0e6e;"class="chzn-select " required>
 <option></option>
 	<?php
@@ -156,6 +158,7 @@ background-repeat:no-repeat;
 			?>
 
 </select> 
+
 
 <!--
 <input type="text" size="25" value="" name="cname" id="country" onkeyup="suggest(this.value);" onblur="fill();" class="" autocomplete="off" placeholder="Nombre de Cliente" style="width: 268px; height:30px;" /> -->
