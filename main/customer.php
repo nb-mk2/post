@@ -152,82 +152,247 @@ $finalcode='RS-'.createRandomPassword();
 <a rel="facebox" href="addcustomer.php"><Button type="submit" class="btn btn-info" style="float:right; width:230px; height:35px;" /><i class="icon-plus-sign icon-large"></i> Agregar cliente</button></a><br><br>
 <br>
 
-<table class="table table-bordered" id="resultTablee" data-responsive="table" style="text-align: left;">
-	<thead>
-		<tr>
-			<th style="font-size:14px; color:green;"width="17%"> Nombre completo</th>
-			<th style="font-size:14px; color:green;"width="10%"> Dirección </th>
-			<th style="font-size:14px; color:green;" width="10%"> Telefono</th>
-			<th style="font-size:14px; color:green;" width="17%"> Nota </th>
-			<th style="font-size:14px; color:green;" width="14%"> Acción </th>
-		</tr>
-	</thead>
-	<tbody>
-		
-			<?php
-				include('../connect.php');
-				$result = $db->prepare("SELECT * FROM customer ORDER BY customer_id DESC");
-				$result->execute();
-				for($i=0; $row = $result->fetch(); $i++){
-			?>
-			<tr class="record">
-			<td><?php echo $row['customer_name']; ?></td>
-			<td><?php echo $row['address']; ?></td>
-			<td><?php echo $row['contact']; ?></td>
+<div class="container py-4 text-center">
+            <div class="row g-4">
+                <div class="col-auto">
+                    <label for="num_registros" class="col-form-label">Mostrar: </label>
+                </div>
 
-			<td><?php echo $row['note']; ?></td>
+                <div class="col-auto">
+                    <select name="num_registros" id="num_registros" class="form-select">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
 
-			<td><a  title="Click To Edit Customer" rel="facebox" href="editcustomer.php?id=<?php echo $row['customer_id']; ?>"><button class="btn btn-warning btn-mini"><i class="icon-edit"></i> Edit </button></a> 
-			<a href="#" id="<?php echo $row['customer_id']; ?>" class="delbutton" title="Click para eliminar"><button class="btn btn-danger btn-mini"><i class="icon-trash"></i> Borrar</button></a></td>
-			</tr>
-			<?php
-				}
-			?>
-		
-	</tbody>
-		
-</table>
+                <div class="col-auto">
+                    <label for="num_registros" class="col-form-label">registros </label>
+                </div>
+
+                <div class="col-5"></div>
+
+                <div class="col-auto">
+                    <label for="campo" class="col-form-label">Buscar: </label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" name="campo" id="campo" class="form-control">
+                </div>
+            </div>
+
+            <div class="row py-4">
+                <div class="col">
+                    <table class="table table-sm table-bordered table-striped">
+                        <thead>
+							<th class="sort asc">id</th>
+                            <th class="sort asc">Nombre</th>
+                            <th class="sort asc">Direccion</th>
+							<th class="sort asc">Telefono</th>
+							<th class="sort asc">Nota</th>
+                            <th class="sort asc" style="width:104px !important;"></th>
+	
+                        </thead>
+
+                        <!-- El id del cuerpo de la tabla. -->
+                        <tbody id="content">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <label id="lbl-total"></label>
+                </div>
+
+                <div class="col-6" id="nav-paginacion"></div>
+
+                <input type="hidden" id="pagina" value="1">
+                <input type="hidden" id="orderCol" value="0">
+                <input type="hidden" id="orderType" value="asc">
+            </div>
+        </div>
 <div class="clearfix"></div>
 
 </div>
 </div>
 </div>
 <script src="js/jquery.js"></script>
-  <script type="text/javascript">
-$(function() {
+
+<script type="text/javascript">
+/* Llamando a la función getData() */
+getData();
+
+/* Escuchar un evento keyup en el campo de entrada y luego llamar a la función getData */
+document.getElementById("campo").addEventListener("keyup", function() {
+    getData();
+}, false);
+document.getElementById("num_registros").addEventListener("change", function() {
+    getData();
+}, false);
+
+/* Peticion AJAX */
+function getData() {
+    let input = document.getElementById("campo").value;
+    let num_registros = document.getElementById("num_registros").value;
+    let content = document.getElementById("content");
+    let pagina = document.getElementById("pagina").value;
+    let orderCol = document.getElementById("orderCol").value;
+    let orderType = document.getElementById("orderType").value;
+
+    if (pagina == null) {
+        pagina = 1;
+    }
+
+    let url = "buscarcustomer.php";
+    let formaData = new FormData();
+    formaData.append('campo', input);
+    formaData.append('registros', num_registros);
+    formaData.append('pagina', pagina);
+    formaData.append('orderCol', orderCol);
+    formaData.append('orderType', orderType);
+
+    fetch(url, {
+        method: "POST",
+        body: formaData
+    })
+    .then(response => response.json())
+    .then(data => {
+        content.innerHTML = data.data;
+        document.getElementById("lbl-total").innerHTML = 'Mostrando ' + data.totalFiltro +
+            ' de ' + data.totalRegistros + ' registros';
+        document.getElementById("nav-paginacion").innerHTML = data.paginacion;
+
+        let container = document.getElementById("content");
+container.addEventListener("click", function(event) {
+  if (event.target.classList.contains("rel")) {
+    facebox();
+  }
+});
+    })
+    .catch(err => console.log(err));
+}
 
 
-$(".delbutton").click(function(){
+function nextPage(pagina) {
+    document.getElementById('pagina').value = pagina;
+    getData();
+}
 
-//Save the link in a variable called element
-var element = $(this);
+let columns = document.getElementsByClassName("sort");
+let tamanio = columns.length;
+for (let i = 0; i < tamanio; i++) {
+    columns[i].addEventListener("click", ordenar);
+}
 
-//Find the id of the link that was clicked
-var del_id = element.attr("id");
+function ordenar(e) {
+    let elemento = e.target;
 
-//Built a url to send
-var info = 'id=' + del_id;
- if(confirm("Estas seguro que quieres eliminar este cliente?"))
-		  {
+    document.getElementById('orderCol').value = elemento.cellIndex;
 
- $.ajax({
-   type: "GET",
-   url: "deletecustomer.php",
-   data: info,
-   success: function(){
+    if (elemento.classList.contains("asc")) {
+        document.getElementById("orderType").value = "asc";
+        elemento.classList.remove("asc");
+        elemento.classList.add("desc");
+    } else {
+        document.getElementById("orderType").value = "desc";
+        elemento.classList.remove("desc");
+        elemento.classList.add("asc");
+    }
+
+    getData();
+}
+
+$(document).ready(function() {
+
+/* Llamando a la función getData() */
+getData();
+
+/* Escuchar un evento keyup en el campo de entrada y luego llamar a la función getData */
+$("#campo").on("keyup", function() {
+  getData();
+});
+
+$("#num_registros").on("change", function() {
+  getData();
+});
+
+/* Peticion AJAX */
+function getData() {
+  // ...
+}
+
+function nextPage(pagina) {
+  // ...
+}
+
+let columns = document.getElementsByClassName("sort");
+let tamanio = columns.length;
+for (let i = 0; i < tamanio; i++) {
+  columns[i].addEventListener("click", ordenar);
+}
+
+function ordenar(e) {
+  // ...
+}
+
+// Enlazar el evento click al contenedor principal
+$(document).on('click', '.delbutton', function() {
+    var del_id = $(this).attr("id");
+    var info = 'id=' + del_id;
+    var row = $(this).closest('tr'); // Obtener la fila padre (tr) que contiene el botón de eliminar
+    if (confirm("¿Seguro que quieres eliminar este Cliente?")) {
+        $.ajax({
+            type: "GET",
+            url: "deletecustomer.php",
+            data: info,
+            success: function() {
+                row.fadeOut('slow', function() {
+                    row.remove();
+                });
+            }
+        });
    
-   }
- });
-         $(this).parents(".record").animate({ backgroundColor: "#fbc7c7" }, "fast")
-		.animate({ opacity: "hide" }, "slow");
+    }
+    return false;
+});
 
- }
+$(document).on('click', '.delbuttonPorcentaje', function() {
+    var del_id = $(this).attr("id");
+    var info = 'id=' + del_id;
+    var row = $(this).closest('tr'); // Obtener la fila padre (tr) que contiene el botón de eliminar
+    //if (confirm("¿QUIERES SUBIR EL PRECIO UN 2%?")) {
+        $.ajax({
+            type: "GET",
+            url: "subir_porcentaje.php",
+            data: info,
+            success: function(response) {
+                //console.log(response);
+                // Obtener el nuevo precio del producto desde la respuesta del servidor
+                var nuevoPrecio = parseFloat(response);
+               // console.log(nuevoPrecio);
 
-return false;
+                // Obtener la celda de precio actual
+                var celdaPrecio = row.find('td:eq(2)');
+
+                // Actualizar el valor mostrado en la celda
+                celdaPrecio.text(nuevoPrecio.toFixed(2));
+
+    
+            }
+        });
+   
+   // }
+    return false;
+});
+
 
 });
 
-});
+</script>
+
 </script>
 <!-- JQUERY -->
     <script src="js/jquery-1.7.2.min.js">
@@ -238,6 +403,8 @@ return false;
     <script type="js/jquery.dataTables.min.js"></script>
     <!-- BOOTSTRAP -->
      <script src="js.jquery.dataTables.js"></script>
+
+
 
     <script>
         $(document).ready(function () {
