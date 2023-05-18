@@ -143,13 +143,13 @@ $finalcode='RS-'.createRandomPassword();
 <button  style="float:right;" class="btn btn-success btn-mini"><a href="javascript:Clickheretoprint()"> Imprimir</button></a>
 
 </div>
-
+<!-- 
 <form action="salesreport.php" method="get">
 <center><strong>De : <input type="text" style="width: 223px; padding:14px;" name="d1" class="tcal" value="" /> A: <input type="text" style="width: 223px; padding:14px;" name="d2" class="tcal" value="" />
  <button class="btn btn-info" style="width: 123px; height:35px; margin-top:-8px;margin-left:8px;" type="submit"><i class="icon icon-search icon-large"></i> Buscar</button>
 </strong></center>
 </form>
-<div class="content" id="content">
+<div class="content" id="">
 <div style="font-weight:bold; text-align:center;font-size:14px;margin-bottom: 15px;">
 Ventas desde la fecha&nbsp;<?php echo $_GET['d1'] ?>&nbsp;hasta&nbsp;<?php echo $_GET['d2'] ?>
 </div>
@@ -222,82 +222,254 @@ Ventas desde la fecha&nbsp;<?php echo $_GET['d1'] ?>&nbsp;hasta&nbsp;<?php echo 
 				
 		</tr>
 	</head>
-</table>
+</table> -->
 
 
 <br><br><br>
 
-<!--<input type="text" style="padding:15px;" name="filter" value="" id="filter" placeholder="Buscar Clientes" autocomplete="off" /> -->
-<table class="table table-bordered" id="resultTablee" data-responsive="table" style="text-align: left;">
-	<thead>
 
-		<tr>
-			<td width="12%" style="font-size:14px; color:green;" > Nombre</td>
-			<td width="12%"style="font-size:14px; color:green;"> Fecha de la compra</td>
-			<td width="12%"style="font-size:14px; color:green;"> Detalles de la compra</td>
-			<td width="6%"style="font-size:14px; color:green;"> Ventas </td>
-			<td width="10%"style="font-size:14px; color:green;"> Accion </td>
-		</tr>
-	</thead>
-	<tbody>
-		
-			<?php
-				include('../connect.php');
-				$result = $db->prepare("SELECT cuenta,name,amount,date,material,invoice_number FROM sales where cuenta='pagado' ");
-				$result->execute();
-				for($i=0; $row = $result->fetch(); $i++){
-			?>
-			<tr class="record">
-			
-			<?php $invoice=$row['invoice_number'];?>
-			<?php $detalles=''; ?>
-			
-			<td><?php echo $row['name']; ?></td>
-			<td><?php echo $row['date']; ?></td>
-			
-			<?php
-			$result1 = $db->prepare("SELECT product_code,qty FROM sales_order where invoice='$invoice' ");
-			$result1->execute();
-			for($e=0; $row1 = $result1->fetch(); $e++){
-				
-			?>
+<div class="container py-4 text-center">
+            <div class="row g-4">
+                <div class="col-auto">
+                    <label for="num_registros" class="col-form-label">Mostrar: </label>
+                </div>
+
+                <div class="col-auto">
+                    <select name="num_registros" id="num_registros" class="form-select">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+
+                <div class="col-auto">
+                    <label for="num_registros" class="col-form-label">registros </label>
+                </div>
+
+                <div class="col-5"></div>
+
+                <div class="col-auto">
+                    <label for="campo" class="col-form-label">Buscar: </label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" name="campo" id="campo" class="form-control">
+                </div>
+            </div>
+
+            <div class="row py-4">
+                <div class="col">
+                    <table class="table table-sm table-bordered table-striped">
+                        <thead>
+                            <th class="sort asc">Nombre</th>
+                            <th class="sort asc">Fecha de compra</th>
+							<th class="sort asc">Detalle</th>
+							<th class="sort asc">Monto</th>
+                            <th class="sort asc" ></th>
 	
-			<?php $detalles= $detalles . $row1['qty'] . ' ' . $row1['product_code'] . ' / ';?>
-			
-			<?php
-				}
-			?>
-			<td><?php echo $detalles; ?></td>
-			
-			<td>$<?php echo $row['amount']; ?></td>
+                        </thead>
 
-			
-			<td>
-				<a href="#" id="<?php echo $row['invoice_number']; ?>" class="delbutton" title="Click para eliminar venta">
-					<button class="btn btn-danger"><i class="icon-trash"></i>Borrar</button>
-				</a>
-				<a  href="preview.php?invoice=<?php echo  $row['invoice_number'];?>">
-					<button class=" btn-danger" style="  background: #27b942; position: auto;">
-						<i class="icon icon-search icon-large"></i> Ver
-					</button>
-				</a>
-			</td>
-			
-			</tr>
-			<?php
-				}
-			?>
-		
-		
-		
-	</tbody>
-</table>
+                        <!-- El id del cuerpo de la tabla. -->
+                        <tbody id="content">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <label id="lbl-total"></label>
+                </div>
+
+                <div class="col-6" id="nav-paginacion"></div>
+
+                <input type="hidden" id="pagina" value="1">
+                <input type="hidden" id="orderCol" value="0">
+                <input type="hidden" id="orderType" value="asc">
+            </div>
+        </div>
+<div class="clearfix"></div>
 
 
 <div class="clearfix"></div>
 </div>
 </div>
 </div>
+<script src="js/jquery.js"></script>
+<script type="text/javascript">
+/* Llamando a la función getData() */
+getData();
+
+/* Escuchar un evento keyup en el campo de entrada y luego llamar a la función getData */
+document.getElementById("campo").addEventListener("keyup", function() {
+    getData();
+}, false);
+document.getElementById("num_registros").addEventListener("change", function() {
+    getData();
+}, false);
+
+/* Peticion AJAX */
+function getData() {
+    let input = document.getElementById("campo").value;
+    let num_registros = document.getElementById("num_registros").value;
+    let content = document.getElementById("content");
+    let pagina = document.getElementById("pagina").value;
+    let orderCol = document.getElementById("orderCol").value;
+    let orderType = document.getElementById("orderType").value;
+
+    if (pagina == null) {
+        pagina = 1;
+    }
+
+    let url = "buscarsalesreport.php";
+    let formaData = new FormData();
+    formaData.append('campo', input);
+    formaData.append('registros', num_registros);
+    formaData.append('pagina', pagina);
+    formaData.append('orderCol', orderCol);
+    formaData.append('orderType', orderType);
+
+    fetch(url, {
+        method: "POST",
+        body: formaData
+    })
+    .then(response => response.json())
+    .then(data => {
+        content.innerHTML = data.data;
+        document.getElementById("lbl-total").innerHTML = 'Mostrando ' + data.totalFiltro +
+            ' de ' + data.totalRegistros + ' registros';
+        document.getElementById("nav-paginacion").innerHTML = data.paginacion;
+
+        let container = document.getElementById("content");
+container.addEventListener("click", function(event) {
+  if (event.target.classList.contains("rel")) {
+    facebox();
+  }
+});
+    })
+    .catch(err => console.log(err));
+}
+
+
+function nextPage(pagina) {
+    document.getElementById('pagina').value = pagina;
+    getData();
+}
+
+let columns = document.getElementsByClassName("sort");
+let tamanio = columns.length;
+for (let i = 0; i < tamanio; i++) {
+    columns[i].addEventListener("click", ordenar);
+}
+
+function ordenar(e) {
+    let elemento = e.target;
+
+    document.getElementById('orderCol').value = elemento.cellIndex;
+
+    if (elemento.classList.contains("asc")) {
+        document.getElementById("orderType").value = "asc";
+        elemento.classList.remove("asc");
+        elemento.classList.add("desc");
+    } else {
+        document.getElementById("orderType").value = "desc";
+        elemento.classList.remove("desc");
+        elemento.classList.add("asc");
+    }
+
+    getData();
+}
+
+$(document).ready(function() {
+
+/* Llamando a la función getData() */
+getData();
+
+/* Escuchar un evento keyup en el campo de entrada y luego llamar a la función getData */
+$("#campo").on("keyup", function() {
+  getData();
+});
+
+$("#num_registros").on("change", function() {
+  getData();
+});
+
+/* Peticion AJAX */
+function getData() {
+  // ...
+}
+
+function nextPage(pagina) {
+  // ...
+}
+
+let columns = document.getElementsByClassName("sort");
+let tamanio = columns.length;
+for (let i = 0; i < tamanio; i++) {
+  columns[i].addEventListener("click", ordenar);
+}
+
+function ordenar(e) {
+  // ...
+}
+
+
+
+$(document).on('click', '.delbuttonPorcentaje', function() {
+    var del_id = $(this).attr("id");
+    var info = 'id=' + del_id;
+    var row = $(this).closest('tr'); // Obtener la fila padre (tr) que contiene el botón de eliminar
+    //if (confirm("¿QUIERES SUBIR EL PRECIO UN 2%?")) {
+        $.ajax({
+            type: "GET",
+            url: "subir_porcentaje.php",
+            data: info,
+            success: function(response) {
+                //console.log(response);
+                // Obtener el nuevo precio del producto desde la respuesta del servidor
+                var nuevoPrecio = parseFloat(response);
+               // console.log(nuevoPrecio);
+
+                // Obtener la celda de precio actual
+                var celdaPrecio = row.find('td:eq(2)');
+
+                // Actualizar el valor mostrado en la celda
+                celdaPrecio.text(nuevoPrecio.toFixed(2));
+
+    
+            }
+        });
+   
+   // }
+    return false;
+});
+
+
+// Enlazar el evento click al contenedor principal
+$(document).on('click', '.delbutton', function() {
+    var del_id = $(this).attr("id");
+    var info = 'id=' + del_id;
+    var row = $(this).closest('tr'); // Obtener la fila padre (tr) que contiene el botón de eliminar
+    if (confirm("¿Seguro que quieres eliminar esta Venta?")) {
+        $.ajax({
+            type: "GET",
+            url: "deletesales.php",
+            data: info,
+            success: function() {
+                row.fadeOut('slow', function() {
+                    row.remove(); // Eliminar la fila del DOM una vez que se haya completado la solicitud AJAX
+                });
+            }
+        });
+    }
+    return false;
+});
+
+});
+
+</script>
+
 <!-- JQUERY -->
     <script src="js/jquery-1.7.2.min.js">
         </script>
@@ -341,40 +513,7 @@ Ventas desde la fecha&nbsp;<?php echo $_GET['d1'] ?>&nbsp;hasta&nbsp;<?php echo 
 </body>
 
   <script type="text/javascript">
-$(function() {
 
-
-$(".delbutton").click(function(){
-
-//Save the link in a variable called element
-var element = $(this);
-
-//Find the id of the link that was clicked
-var del_id = element.attr("id");
-
-//Built a url to send
-var info = 'id=' + del_id;
- if(confirm("Estas seguro que quieres eliminar esta venta?"))
-		  {
-
- $.ajax({
-   type: "GET",
-   url: "deletesales.php",
-   data: info,
-   success: function(){
-   
-   }
- });
-         $(this).parents(".record").animate({ backgroundColor: "#fbc7c7" }, "fast")
-		.animate({ opacity: "hide" }, "slow");
-
- }
-
-return false;
-
-});
-
-});
 </script>
 <?php include('footer.php');?>
 
