@@ -253,48 +253,222 @@ window.onload=startclock;
 		
 	</tbody>
 </table>
+
+<div class="container py-4 text-center">
+            <div class="row g-4">
+                <div class="col-auto">
+                    <label for="num_registros" class="col-form-label">Mostrar: </label>
+                </div>
+
+                <div class="col-auto">
+                    <select name="num_registros" id="num_registros" class="form-select">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+
+                <div class="col-auto">
+                    <label for="num_registros" class="col-form-label">registros </label>
+                </div>
+
+                <div class="col-5"></div>
+
+                <div class="col-auto">
+                    <label for="campo" class="col-form-label">Buscar: </label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" name="campo" id="campo" class="form-control">
+                </div>
+            </div>
+
+            <div class="row py-4">
+                <div class="col">
+                    <table class="table table-sm table-bordered table-striped">
+                        <thead>
+							<!--<th class="sort asc">id</th> -->
+                            <th class="sort asc">Nombre</th>
+                            <th class="sort asc">Fecha Compra</th>
+							<th class="sort asc">Detalle</th>
+							<th class="sort asc">Total</th>
+							<th class="sort asc"> Debe </th>				
+                            <th class="sort asc" style="width:104px !important;"></th>
+	
+                        </thead>
+
+                        <!-- El id del cuerpo de la tabla. -->
+                        <tbody id="content">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <label id="lbl-total"></label>
+                </div>
+
+                <div class="col-6" id="nav-paginacion"></div>
+
+                <input type="hidden" id="pagina" value="1">
+                <input type="hidden" id="orderCol" value="0">
+                <input type="hidden" id="orderType" value="asc">
+            </div>
+        </div>
+
 <div class="clearfix"></div>
 </div>
 </div>
 </div>
 
 <script src="js/jquery.js"></script>
-  <script type="text/javascript">
-$(function() {
+<script type="text/javascript">
+/* Llamando a la función getData() */
+getData();
+
+/* Escuchar un evento keyup en el campo de entrada y luego llamar a la función getData */
+document.getElementById("campo").addEventListener("keyup", function() {
+    getData();
+}, false);
+document.getElementById("num_registros").addEventListener("change", function() {
+    getData();
+}, false);
+
+/* Peticion AJAX */
+function getData() {
+    let input = document.getElementById("campo").value;
+    let num_registros = document.getElementById("num_registros").value;
+    let content = document.getElementById("content");
+    let pagina = document.getElementById("pagina").value;
+    let orderCol = document.getElementById("orderCol").value;
+    let orderType = document.getElementById("orderType").value;
+
+    if (pagina == null) {
+        pagina = 1;
+    }
+
+    let url = "buscarcorriente.php";
+    let formaData = new FormData();
+    formaData.append('campo', input);
+    formaData.append('registros', num_registros);
+    formaData.append('pagina', pagina);
+    formaData.append('orderCol', orderCol);
+    formaData.append('orderType', orderType);
+
+    fetch(url, {
+        method: "POST",
+        body: formaData
+    })
+    .then(response => response.json())
+    .then(data => {
+        content.innerHTML = data.data;
+        document.getElementById("lbl-total").innerHTML = 'Mostrando ' + data.totalFiltro +
+            ' de ' + data.totalRegistros + ' registros';
+        document.getElementById("nav-paginacion").innerHTML = data.paginacion;
+
+        let container = document.getElementById("content");
+container.addEventListener("click", function(event) {
+  if (event.target.classList.contains("rel")) {
+    facebox();
+  }
+});
+    })
+    .catch(err => console.log(err));
+}
 
 
-$(".delbutton").click(function(){
+function nextPage(pagina) {
+    document.getElementById('pagina').value = pagina;
+    getData();
+}
 
-//Save the link in a variable called element
-var element = $(this);
+let columns = document.getElementsByClassName("sort");
+let tamanio = columns.length;
+for (let i = 0; i < tamanio; i++) {
+    columns[i].addEventListener("click", ordenar);
+}
 
-//Find the id of the link that was clicked
-var del_id = element.attr("id");
+function ordenar(e) {
+    let elemento = e.target;
 
-//Built a url to send
-var info = 'id=' + del_id;
- if(confirm("Sure you want to delete this Product? There is NO undo!"))
-		  {
+    document.getElementById('orderCol').value = elemento.cellIndex;
 
- $.ajax({
-   type: "GET",
-   url: "deleteproduct.php",
-   data: info,
-   success: function(){
+    if (elemento.classList.contains("asc")) {
+        document.getElementById("orderType").value = "asc";
+        elemento.classList.remove("asc");
+        elemento.classList.add("desc");
+    } else {
+        document.getElementById("orderType").value = "desc";
+        elemento.classList.remove("desc");
+        elemento.classList.add("asc");
+    }
+
+    getData();
+}
+
+$(document).ready(function() {
+
+/* Llamando a la función getData() */
+getData();
+
+/* Escuchar un evento keyup en el campo de entrada y luego llamar a la función getData */
+$("#campo").on("keyup", function() {
+  getData();
+});
+
+$("#num_registros").on("change", function() {
+  getData();
+});
+
+/* Peticion AJAX */
+function getData() {
+  // ...
+}
+
+function nextPage(pagina) {
+  // ...
+}
+
+let columns = document.getElementsByClassName("sort");
+let tamanio = columns.length;
+for (let i = 0; i < tamanio; i++) {
+  columns[i].addEventListener("click", ordenar);
+}
+
+function ordenar(e) {
+  // ...
+}
+
+// Enlazar el evento click al contenedor principal
+$(document).on('click', '.delbutton', function() {
+    var del_id = $(this).attr("id");
+    var info = 'id=' + del_id;
+    var row = $(this).closest('tr'); // Obtener la fila padre (tr) que contiene el botón de eliminar
+    if (confirm("¿Seguro que quieres eliminar este Cliente?")) {
+        $.ajax({
+            type: "GET",
+            url: "deletecustomer.php",
+            data: info,
+            success: function() {
+                row.fadeOut('slow', function() {
+                    row.remove();
+                });
+            }
+        });
    
-   }
- });
-         $(this).parents(".record").animate({ backgroundColor: "#fbc7c7" }, "fast")
-		.animate({ opacity: "hide" }, "slow");
+    }
+    return false;
+});
 
- }
 
-return false;
 
 });
 
-});
 </script>
+
+
 <!-- JQUERY -->
     <script src="js/jquery-1.7.2.min.js">
         </script>
