@@ -153,7 +153,7 @@ background-repeat:no-repeat;
 <input type="hidden" name="memi" value="<?php echo $id; ?>" />
 <input type="hidden" name="duedatee" value="<?php echo $duedate; ?>" />
 <input type="hidden" name="invoice_number" value="<?php echo $invoice_number; ?>" />
-<span>Paga Con: </span><input type="text" style="width:265px; height:30px;" name="debe"  /><br>
+<span>Paga Con: </span><input type="text" style="width:265px; height:30px;" name="debe" required /><br>
 
 <span>Cuenta : </span>
 <select name="cuenta" value="<?php echo $row['cuenta']; ?>">

@@ -13,15 +13,18 @@ if ($conn->connect_error) {
     die('Error de conexion ' . $conn->connect_error); }
 
 /* Un arreglo de las columnas a mostrar en la tabla */
-$columns = ['transaction_id' , 'name', 'date', 'amount','cuenta', 'invoice_number', 'profit'];
+$columns = ['id' , 'date', 'entrega'];
 
 /* Nombre de la tabla */
-$table = "sales";
+$table = "sales_cuotas";
 
-$id = 'transaction_id';
+$id = 'id';
 
 $campo = isset($_POST['campo']) ? $conn->real_escape_string($_POST['campo']) : null;
 
+
+/* Filtrado */
+$id_invoice = isset($_POST['id_invoice']) ? $_POST['id_invoice'] : 'asc';
 
 /* Filtrado */
 $where = '';
@@ -34,9 +37,9 @@ if ($campo != null) {
         $where .= $columns[$i] . " LIKE '%" . $campo . "%' OR ";
     }
     $where = substr_replace($where, "", -3);
-    $where .= ") AND cuenta = 'Cuenta Corriente'";
+    $where .= " AND invoice_number_sales = '$id_invoice'";
 } else {
-    $where = "WHERE cuenta = 'Cuenta Corriente'";
+    $where = "WHERE invoice_number_sales = '$id_invoice'";
 }
 
 /* Limit */
@@ -92,20 +95,14 @@ $output['totalRegistros'] = $totalRegistros;
 $output['totalFiltro'] = $totalFiltro;
 $output['data'] = '';
 $output['paginacion'] = '';
+$contador=1;
 
 if ($num_rows > 0) {
     while ($row = $resultado->fetch_assoc()) {
         $output['data'] .= '<tr>';
-        $output['data'] .= '<td>' . $row['name'] . '</td>';  
+        $output['data'] .= '<td>' . ($contador++) . '</td>';  
         $output['data'] .= '<td>' . $row['date'] . '</td>';
-        $output['data'] .= '<td>$' . $row['amount'] . '</td>';
-        $output['data'] .= '<td >$' . $row['profit'] . '</td>';
-        $output['data'] .= '<td >' . $row['cuenta'] . '</td>';
-        $output['data'] .= '<td>
-        <a  href="editcuentacorriente.php?id='.$row['invoice_number'].'"><button class="btn btn-warning btn-mini"><i class="icon-edit"></i>PAGAR </button></a> 
-        <a  href="preview.php?invoice='. $row['invoice_number'] .'"><button class=" btn-danger" style="  background: #27b942; position: auto;"><i class="icon icon-search icon-large"></i> Ver</button></a>
-        <a  href="cuotas.php?invoice='. $row['invoice_number'] .'"><button class=" btn-danger" style="  background: #27abb9; position: auto;"><i class="icon icon-search icon-large"></i> Cuotas</button></a>
-        </td>';
+        $output['data'] .= '<td>$' . $row['entrega'] . '</td>';
         $output['data'] .= '</tr>';
     }
 } else {

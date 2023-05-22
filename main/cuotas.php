@@ -161,98 +161,22 @@ window.onload=startclock;
         </div><!--/span-->
 	<div class="span10">
 	<div class="contentheader">
-			<i class="icon-table"></i> Cuentas Corriente
+			<i class="icon-table"></i> Cuotas
 			</div>
 			<ul class="breadcrumb">
 			<li><a href="index.php">Inico</a></li> /
-			<li class="active">Cuentas Corriente</li>
+			<li class="active">Cuotas</li>
 			</ul>
 
 
 <div style="margin-top: -19px; margin-bottom: 21px;">
-<a  href="index.php"><button class="btn btn-default btn-large" style="float: left;"><i class="icon icon-circle-arrow-left icon-large"></i> Atras</button></a>
-			<?php 
-			include('../connect.php');
-				$result = $db->prepare("SELECT cuenta,profit FROM sales where cuenta='cuenta corriente' ");
-				$result->execute();
-				$rowcount = $result->rowcount();
-			?>
-			
-				<div style="text-align:center;">
-			Usuarios con cuentas corriente:  <font color="green" style="font:bold 22px 'Aleo';">[<?php echo $rowcount;?>]</font><br>
-			</div>
+<a  href="corriente.php"><button class="btn btn-default btn-large" style="float: left;"><i class="icon icon-circle-arrow-left icon-large"></i> Atras</button></a>
 	
 </div>
+<br>
+<br>
 
-
-<!--<input type="text" style="padding:15px;" name="filter" value="" id="filter" placeholder="Buscar Clientes" autocomplete="off" />
-<table class="table table-bordered" id="resultTablee" data-responsive="table" style="text-align: left;">
-	<thead>
-		<tr>
-			<th width="12%" style="font-size:14px; color:green;" > Nombre</th>
-			<th width="12%" style="font-size:14px; color:green;" > Fecha de la compra</th>
-			<th width="12%" style="font-size:14px; color:green;" > Detalles de la compra</th>
-			<th width="12%" style="font-size:14px; color:green;" > Cuenta Corriente / Debe </th>
-			<th width="6%" style="font-size:14px; color:green;" > Total </th>
-			<th width="8%" style="font-size:14px; color:green;" > Accion </th>
-		</tr>
-	</thead>
-	<tbody>
-	
-		
-			<?php
-				include('../connect.php');
-				$result = $db->prepare("SELECT cuenta,name,profit,date,material,invoice_number FROM sales where cuenta='cuenta corriente' ");
-				$result->execute();
-				for($i=0; $row = $result->fetch(); $i++){
-			?>
-			<?php $invoice=$row['invoice_number'];?>
-			<?php $detalles=''; ?>
-			<tr>
-			<td><?php echo $row['name']; ?></td>
-			<td><?php echo $row['date']; ?></td>
-		
-
-			<?php
-			$result1 = $db->prepare("SELECT product_code,qty FROM sales_order where invoice='$invoice' ");
-			$result1->execute();
-			for($e=0; $row1 = $result1->fetch(); $e++){
-				
-			?>
-			<?php $detalles= $detalles . $row1['qty'] . ' ' . $row1['product_code'] . ' , ';?>
-			
-			<?php
-				}
-			?>
-			
-			<td><?php echo $detalles; ?></td>
-			
-			<td><?php echo $row['cuenta']; ?></td>
-			<td>$<?php  echo $row['profit']; ?></td>
-			
-			<td><a rel="facebox" title="Click para editar cuenta corriente" href="editcuentacorriente.php?id=<?php echo $row['invoice_number'];  ?>"><button class="btn btn-warning btn-mini"><i class="icon-edit"></i>edit </button></a> 
-
-					<a  href="preview.php?invoice=<?php echo  $row['invoice_number'];?>">
-					<button class=" btn-danger" style="  background: #27b942; position: auto;">
-						<i class="icon icon-search icon-large"></i> Ver
-					</button>
-				</a>
-			</td>
-
-			</tr>
-			
-			
-			
-			<?php
-				}
-			?>
-			
-			
-		
-		
-		
-	</tbody>
-</table>  -->
+<?php $id_invoice = isset($_GET['invoice']) ? $_GET['invoice'] : ''; ?>
 
 <div class="container py-4 text-center">
             <div class="row g-4">
@@ -288,12 +212,10 @@ window.onload=startclock;
                     <table class="table table-sm table-bordered table-striped">
                         <thead>
 							<!--<th class="sort asc">id</th> -->
-                            <th class="sort asc">Nombre</th>
-                            <th class="sort asc">Fecha Compra</th>
-							<th class="sort asc">Total</th>
-							<th class="sort asc">Debe</th>
-							<th class="sort asc"> Descrip </th>				
-                            <th class="sort asc" style="width:240px !important;"></th>
+                            <th class="sort asc">Numº Cuotas</th>
+                            <th class="sort asc">Fecha</th>
+							<th class="sort asc">Entrega</th>
+						
 	
                         </thead>
 
@@ -315,6 +237,7 @@ window.onload=startclock;
                 <input type="hidden" id="pagina" value="1">
                 <input type="hidden" id="orderCol" value="0">
                 <input type="hidden" id="orderType" value="asc">
+                <input type="hidden" id="id_invoice" value="<?php echo($id_invoice); ?>">
             </div>
         </div>
 
@@ -344,18 +267,19 @@ function getData() {
     let pagina = document.getElementById("pagina").value;
     let orderCol = document.getElementById("orderCol").value;
     let orderType = document.getElementById("orderType").value;
+    let id_invoice = document.getElementById("id_invoice").value;
 
     if (pagina == null) {
         pagina = 1;
     }
 
-    let url = "buscarcorriente.php";
+    let url = "buscarcuotas.php";
     let formaData = new FormData();
     formaData.append('campo', input);
     formaData.append('registros', num_registros);
     formaData.append('pagina', pagina);
     formaData.append('orderCol', orderCol);
-    formaData.append('orderType', orderType);
+    formaData.append('id_invoice', id_invoice);
 
     fetch(url, {
         method: "POST",
