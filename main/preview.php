@@ -21,6 +21,14 @@ POS
 <link href="src/facebox.css" media="screen" rel="stylesheet" type="text/css" />
 <script src="lib/jquery.js" type="text/javascript"></script>
 <script src="src/facebox.js" type="text/javascript"></script>
+<script type="text/javascript">
+  jQuery(document).ready(function($) {
+    $('a[rel*=facebox]').facebox({
+      loadingImage : 'src/loading.gif',
+      closeImage   : 'src/closelabel.png'
+    })
+  })
+</script>
 <script language="javascript">
 function Clickheretoprint()
 { 
@@ -232,7 +240,7 @@ window.onload=startclock;
 				<th width="0"> Nombre producto </th>
 				<th> Cantidad </th>
 				<th> Precio Unidad</th>
-			
+				
 				<th> Precio total </th>
 			</tr>
 		</thead>
@@ -251,8 +259,10 @@ window.onload=startclock;
 				<td>
 				<?php
 				$ppp=$row['price'];
-				echo formatMoney($ppp, true);
+				echo formatMoney($ppp, true); 
 				?>
+				
+				<a rel="facebox" href="editprecio.php?id=<?php  echo $row['transaction_id']; ?>"><i class="icon-edit"></i></a>
 				</td>
 				
 				<td>

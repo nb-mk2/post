@@ -233,11 +233,9 @@ window.onload=startclock;
                 <div class="col">
                     <table class="table table-sm table-bordered table-striped">
                         <thead>
-                            <th class="sort asc">ID</th>
+                      
                             <th class="sort asc">Descrip</th>
                             <th class="sort asc precio">Precio</th>
-
-                            <th></th>
                             <th></th>
                         </thead>
 

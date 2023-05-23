@@ -94,7 +94,6 @@ $output['paginacion'] = '';
 if ($num_rows > 0) {
     while ($row = $resultado->fetch_assoc()) {
         $output['data'] .= '<tr>';
-        $output['data'] .= '<td>' . $row['customer_id'] . '</td>';
         $output['data'] .= '<td>' . $row['customer_name'] . '</td>'; 
         $output['data'] .= '<td>' . $row['address'] . '</td>';
         $output['data'] .= '<td>' . $row['contact'] . '</td>';

@@ -34,7 +34,9 @@ if ($campo != null) {
         $where .= $columns[$i] . " LIKE '%" . $campo . "%' OR ";
     }
     $where = substr_replace($where, "", -3);
-    $where .= ")";
+    $where .= ") AND cuenta = 'Pagado'";
+} else {
+    $where = "WHERE cuenta = 'Pagado'";
 }
 
 /* Limit */
@@ -94,7 +96,6 @@ $output['paginacion'] = '';
 if ($num_rows > 0) {
     while ($row = $resultado->fetch_assoc()) {
         $output['data'] .= '<tr>';
-        $output['data'] .= '<td>' . $row['transaction_id'] . '</td>';
         $output['data'] .= '<td>' . $row['name'] . '</td>';  
         $output['data'] .= '<td>' . $row['date'] . '</td>';
         $output['data'] .= '<td>$' . $row['amount'] . '</td>';

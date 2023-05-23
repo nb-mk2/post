@@ -185,7 +185,6 @@ $finalcode='RS-'.createRandomPassword();
                 <div class="col">
                     <table class="table table-sm table-bordered table-striped">
                         <thead>
-							<th class="sort asc">id</th>
                             <th class="sort asc">Nombre</th>
                             <th class="sort asc">Direccion</th>
 							<th class="sort asc">Telefono</th>

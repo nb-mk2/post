@@ -94,7 +94,6 @@ $output['paginacion'] = '';
 if ($num_rows > 0) {
     while ($row = $resultado->fetch_assoc()) {
         $output['data'] .= '<tr>';
-        $output['data'] .= '<td>' . $row['product_id'] . '</td>';
         $output['data'] .= '<td>' . $row['product_code'] . '</td>'; 
         $output['data'] .= '<td>' . $row['price'] . '</td>';
         $output['data'] .= '<td><a   title="Click para editar materiales" href="editproduct.php?id=' . $row['product_id'] . '"><button class="btn btn-warning"><i class="icon-edit"></i> </button> </a>
