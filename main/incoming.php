@@ -5,7 +5,7 @@ $a = $_POST['invoice'];
 $b = $_POST['producto_id'];
 $c = $_POST['qty'];
 $w = $_POST['pt'];
-$date = $_POST['date'];
+$date = date("d/m/Y"); 
 $discount = $_POST['discount'];
 $result = $db->prepare("SELECT * FROM products WHERE product_id= :userid");
 $result->bindParam(':userid', $b);

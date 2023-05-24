@@ -163,7 +163,7 @@ if($position=='admin') {
 
 <a rel="facebox" href="addcustomer.php?pt=<?php echo $_GET['id']?>&invoice=<?php echo $_GET['invoice']?>&pantalla=1"><Button type="submit" class="btn btn-info" style="float:right; width:230px; height:35px;" ><i class="icon-plus-sign icon-large"></i> Nuevo Cliente</button></a><br><br>													
 
-<form action="incoming.php" method="post" >
+<form action="incoming.php" method="post" onsubmit="return validarFormulario()">
 											
 <input type="hidden" name="pt" value="<?php echo $_GET['id']; ?>" />
 <input type="hidden" name="invoice" value="<?php echo $_GET['invoice']; // product?>" />
@@ -172,7 +172,6 @@ if($position=='admin') {
 <input type="text" name="campo" id="campo"  style="width:650px; font-size: 24px; " required>
 <input type="number" step = "any" min = ”0 ″ name="qty" value="1" min="1" placeholder="Qty" autocomplete="off" style="width: 68px; height:30px; padding-top:6px; padding-bottom: 4px; margin-right: 4px; font-size:15px;"  required>
 <input type="hidden" name="discount" value="" autocomplete="off" style="width: 68px; height:30px; padding-top:6px; padding-bottom: 4px; margin-right: 4px; font-size:15px;" />
-<input type="hidden" name="date" value="<?php echo date("d/m/y"); ?>" />
 <Button type="submit" class="btn btn-info" style="width: 123px; height:35px; margin-top:-5px;" ><i class="icon-plus-sign icon-large"></i> Agregar</button>
 <ul  style="width: 650px; font-size: 24px; margin-bottom: 5px; " id="lista"></ul>
 
@@ -354,7 +353,16 @@ if($position=='admin') {
 			}
 		});
 
-  </script>
+  
+		function validarFormulario() {
+        var productoId = document.getElementById("producto_id").value;
+        if (productoId === "") {
+            alert("Debe seleccionar el Producto dentro del desplegable!!");
+            return false;
+        }
+        return true;
+    }
+ </script>
 
 </body>
 <?php include('footer.php');?>

@@ -130,7 +130,7 @@ background-repeat:no-repeat;
 </head>
 <body onLoad="document.getElementById('country').focus();">
 
-<form action="savesales.php" method="post">
+<form action="savesales.php" method="post" >
 	
 <div id="ac">
 <center><h4><i class="icon icon-money icon-large"></i> Efectivo</h4></center><hr>
@@ -176,30 +176,49 @@ if($asas=='cash') {
 <option value="Presupuesto">Presupuesto</option>
 </select>
 
-<button class="btn btn-success btn-block btn-large" style="width:267px;"><i class="icon icon-save icon-large"></i> Guardar</button>
+<button class="btn btn-success btn-block btn-large" style="width:267px;"><i class="icon icon-save icon-large" ></i> Guardar</button>
 </center>
 </div>
 </form>
 
 <script>
-  jQuery(document).ready(function($) {
-    $('#cuenta').change(function() {
-      handleSelectChange();
-    });
-    
-    function handleSelectChange() {
-      var select = document.getElementById("cuenta");
-      var cashInput = document.getElementById("cash");
-
-      if (select.value === "Pagado") {
-        cashInput.readOnly = false;
-        cashInput.value = 0;
-      } else if (select.value === "Presupuesto") {
-        cashInput.readOnly = true;
-        cashInput.value = "";
-      }
-    }
+jQuery(document).ready(function($) {
+  $('#cuenta').change(function() {
+    handleSelectChange();
+	
   });
+
+  function validarFormulario2() {
+    var productoId = document.getElementById("product").value;
+    if (productoId === "") {
+      alert("Debe seleccionar el Cliente dentro del desplegable!!");
+      return false;
+    }
+    return true;
+  }
+
+  function handleSelectChange() {
+    var select = document.getElementById("cuenta");
+    var cashInput = document.getElementById("cash");
+
+    if (select.value === "Pagado") {
+      cashInput.readOnly = false;
+      cashInput.value = 0;
+    } else if (select.value === "Presupuesto") {
+      cashInput.readOnly = true;
+      cashInput.value = "";
+    }
+  }
+
+    // Evento onclick del botón "Guardar"
+    $('.btn-success').click(function() {
+      if (!validarFormulario2()) {
+        return false;
+      }
+    });
+});
+
+
 
   document.getElementById("campo2").addEventListener("keyup", getCodigos)
 

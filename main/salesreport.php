@@ -143,12 +143,14 @@ $finalcode='RS-'.createRandomPassword();
 <button  style="float:right;" class="btn btn-success btn-mini"><a href="javascript:Clickheretoprint()"> Imprimir</button></a>
 
 </div>
-<!-- 
+
 <form action="salesreport.php" method="get">
-<center><strong>De : <input type="text" style="width: 223px; padding:14px;" name="d1" class="tcal" value="" /> A: <input type="text" style="width: 223px; padding:14px;" name="d2" class="tcal" value="" />
+<center><strong>De : <input type="date" style="width: 223px; padding:14px;" name="d1" class="tcal" value="" /> A: <input type="date" style="width: 223px; padding:14px;" name="d2" class="tcal" value="" />
  <button class="btn btn-info" style="width: 123px; height:35px; margin-top:-8px;margin-left:8px;" type="submit"><i class="icon icon-search icon-large"></i> Buscar</button>
 </strong></center>
 </form>
+
+<!-- 
 <div class="content" id="">
 <div style="font-weight:bold; text-align:center;font-size:14px;margin-bottom: 15px;">
 Ventas desde la fecha&nbsp;<?php echo $_GET['d1'] ?>&nbsp;hasta&nbsp;<?php echo $_GET['d2'] ?>

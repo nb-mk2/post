@@ -3,7 +3,7 @@ session_start();
 include('../connect.php');
 $a = $_POST['invoice'];
 $b = $_POST['cashier'];
-$c = $_POST['date'];
+$c = date("d/m/Y"); 
 $d = $_POST['ptype'];
 $e = $_POST['amount'];
 $z = $_POST['profit'];
