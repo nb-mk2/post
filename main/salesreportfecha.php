@@ -23,13 +23,13 @@
 
 
 <link href="../style.css" media="screen" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="tcal.css" />
+
 <script src="jeffartagame.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/application.js" type="text/javascript" charset="utf-8"></script>
 <link href="src/facebox.css" media="screen" rel="stylesheet" type="text/css" /
 <script src="lib/jquery.js" type="text/javascript"></script>
 <script src="src/facebox.js" type="text/javascript"></script>
-<script type="text/javascript" src="tcal.js"></script>
+
 <script language="javascript">
 function Clickheretoprint()
 { 
@@ -141,75 +141,94 @@ $finalcode='RS-'.createRandomPassword();
 <div style="margin-top: -19px; margin-bottom: 21px;">
 <a  href="index.php"><button class="btn btn-default btn-large" style="float: none;"><i class="icon icon-circle-arrow-left icon-large"></i> Atras</button></a>
 <button  style="float:right;" class="btn btn-success btn-mini"><a href="javascript:Clickheretoprint()"> Imprimir</button></a>
-<button  style="float:right;background: teal !important" class="btn btn-success btn-mini" ><a href="salesreportfecha.php?d1=0&amp;d2=0"> Reportes Fecha</button></a>
 
 </div>
 
+<form action="salesreportfecha.php" method="get">
+<center><strong>De : <input type="date" style="width: 223px; padding:14px;" name="d1" id="d1"  value=""/> A: <input type="date" style="width: 223px; padding:14px;" name="d2" id="d2"  value="" />
+ <button class="btn btn-info" style="width: 123px; height:35px; margin-top:-8px;margin-left:8px;" type="submit"><i class="icon icon-search icon-large"></i> Buscar</button>
+</strong></center>
+</form>
 
 
+<div class="content" id="">
+<div style="font-weight:bold; text-align:center;font-size:14px;margin-bottom: 15px;">
+Ventas desde la fecha&nbsp;<?php echo $_GET['d1'] ?>&nbsp;hasta&nbsp;<?php echo $_GET['d2'] ?>
+</div>
+<table class="table table-bordered" id="resultTable" data-responsive="table" style="text-align: left;">
+	<head>
+		<tr style="color: black; border-style">
+			<th  width="20%"> Fecha de Transacción </th>
+			<th width="20%"> Nombre del cliente </th>
+			<th width="18%"> Ventas </th>
+		</tr>
+	</head>
+	<tbody>
+		
+			<?php
+				include('../connect.php');
+				$d1=$_GET['d1'];
+				$d2=$_GET['d2'];
+                $formattedDate1 = date('d/m/Y', strtotime($d1));
+                $formattedDate2 = date('d/m/Y', strtotime($d2));
+            
+				$result = $db->prepare("SELECT * FROM sales WHERE date BETWEEN :a AND :b and cuenta='pagado' ORDER by transaction_id DESC ");
+				$result->bindParam(':a', $formattedDate1);
+				$result->bindParam(':b', $formattedDate2);
+				$result->execute();
+				for($i=0; $row = $result->fetch(); $i++){
+			?>
+			<tr class="record">
+			<td><?php echo $row['date']; ?></td>
+			<td><?php echo $row['name']; ?></td>
 
-<div class="container py-4 text-center">
-            <div class="row g-4">
-                <div class="col-auto">
-                    <label for="num_registros" class="col-form-label">Mostrar: </label>
-                </div>
+			<td>$<?php
+			$dsdsd=$row['amount'];
+			echo formatMoney($dsdsd, true);
+			?></td>
+			
+			</tr>
+			<?php
+				}
+			?>
+		
+	</tbody>
+	<head>
+		<tr>
+			<th colspan="4" style="border-top:1px solid #999999"> Total: </th>
+			<th colspan="1" style="border-top:1px solid #999999"> 
+			<?php
+				function formatMoney($number, $fractional=false) {
+					if ($fractional) {
+						$number = sprintf('%.2f', $number);
+					}
+					while (true) {
+						$replaced = preg_replace('/(-?\d+)(\d\d\d)/', '$1,$2', $number);
+						if ($replaced != $number) {
+							$number = $replaced;
+						} else {
+							break;
+						}
+					}
+					return $number;
+				}
+			
+				$results = $db->prepare("SELECT sum(amount) FROM sales WHERE date BETWEEN :a AND :b and cuenta='pagado'");
+				$results->bindParam(':a', $formattedDate1);
+				$results->bindParam(':b', $formattedDate2);
+				$results->execute();
+				for($i=0; $rows = $results->fetch(); $i++){
+				$dsdsd=$rows['sum(amount)'];
+				echo formatMoney($dsdsd, true);
+				}
+				?>
+			</th>
+				
+		</tr>
+	</head>
+</table> 
 
-                <div class="col-auto">
-                    <select name="num_registros" id="num_registros" class="form-select">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </div>
 
-                <div class="col-auto">
-                    <label for="num_registros" class="col-form-label">registros </label>
-                </div>
-
-                <div class="col-5"></div>
-
-                <div class="col-auto">
-                    <label for="campo" class="col-form-label">Buscar: </label>
-                </div>
-                <div class="col-auto">
-                    <input type="text" name="campo" id="campo" class="form-control">
-                </div>
-            </div>
-
-            <div class="row py-4">
-                <div class="col">
-                    <table class="table table-sm table-bordered table-striped">
-                        <thead>
-                            <th class="sort asc">Nombre</th>
-                            <th class="sort asc">Fecha de compra</th>
-							<th class="sort asc">Detalle</th>
-							<th class="sort asc">Monto</th>
-                            <th class="sort asc" ></th>
-	
-                        </thead>
-
-                        <!-- El id del cuerpo de la tabla. -->
-                        <tbody id="content">
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-6">
-                    <label id="lbl-total"></label>
-                </div>
-
-                <div class="col-6" id="nav-paginacion"></div>
-
-                <input type="hidden" id="pagina" value="1">
-                <input type="hidden" id="orderCol" value="0">
-                <input type="hidden" id="orderType" value="asc">
-            </div>
-        </div>
-<div class="clearfix"></div>
 
 
 <div class="clearfix"></div>
@@ -218,6 +237,7 @@ $finalcode='RS-'.createRandomPassword();
 </div>
 <script src="js/jquery.js"></script>
 <script type="text/javascript">
+
 /* Llamando a la función getData() */
 getData();
 

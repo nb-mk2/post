@@ -28,6 +28,6 @@ $(document).ready(function() {
   <option value="mercedes">Mercedes</option>
   <option value="audi">Audi</option>
 </select> 
-
+<input type="date" style="width: 223px; padding:14px;" name="d1" id="d1"  value=""/>
 </body>
 </html> 

@@ -41,7 +41,8 @@ $campo = $_POST["campo2"];
 
 //$sql = "SELECT cp, asentamiento FROM codigos_postales WHERE cp LIKE ? OR asentamiento LIKE ? ORDER BY cp ASC LIMIT 0, 10";
 //$sql = "SELECT customer_id, customer_name FROM customer WHERE customer_name LIKE ? ORDER BY customer_id ASC LIMIT 0, 10";
-$sql = "SELECT customer_id, customer_name FROM customer WHERE customer_name LIKE ? ORDER BY customer_name ASC LIMIT 0, 10";
+$sql = "SELECT customer_id, customer_name FROM customer WHERE customer_name LIKE CONCAT('%', ?, '%') ORDER BY customer_name ASC LIMIT 0, 10";
+
 
 $query = $pdo->prepare($sql);
 $query->execute([$campo . '%']);

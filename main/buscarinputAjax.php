@@ -40,7 +40,7 @@ $pdo = $con->conectar();
 $campo = $_POST["campo"];
 
 //$sql = "SELECT cp, asentamiento FROM codigos_postales WHERE cp LIKE ? OR asentamiento LIKE ? ORDER BY cp ASC LIMIT 0, 10";
-$sql = "SELECT product_id, product_code, price FROM products WHERE product_code LIKE ? OR price LIKE ? ORDER BY product_id ASC LIMIT 0, 10";
+$sql = "SELECT product_id, product_code, price FROM products WHERE product_code LIKE CONCAT('%', ?, '%') OR price LIKE CONCAT('%', ?, '%') ORDER BY product_id ASC LIMIT 0, 10";
 
 $query = $pdo->prepare($sql);
 $query->execute([$campo . '%', $campo . '%']);
@@ -49,7 +49,7 @@ $html = "";
 
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     
-    $html .= "<li style=\"margin-bottom: 9px; color: #000 !important;\" onclick=\"mostrar('" . $row["product_id"] . "', '" . $row["product_code"] . "')\">" . $row["product_code"]  . "</li>";
+    $html .= "<li style=\"margin-bottom: 9px; color: #000 !important;\" onclick=\"mostrar('" . $row["product_id"] . "', '" . $row["product_code"] . "')\">" . $row["product_code"]  . "   ----> $". $row["price"]. "</li>";
     
 }
 

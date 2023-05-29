@@ -95,7 +95,7 @@ if ($num_rows > 0) {
     while ($row = $resultado->fetch_assoc()) {
         $output['data'] .= '<tr>';
         $output['data'] .= '<td>' . $row['product_code'] . '</td>'; 
-        $output['data'] .= '<td>' . $row['price'] . '</td>';
+        $output['data'] .= '<td>$ ' . $row['price'] . '</td>';
         $output['data'] .= '<td><a   title="Click para editar materiales" href="editproduct.php?id=' . $row['product_id'] . '"><button class="btn btn-warning"><i class="icon-edit"></i> </button> </a>
         <a href="#" id="'. $row['product_id'] .'"  class="delbutton" title="Borrar"><button class="btn btn-danger btn-mini"><i class="icon-trash"></i> Borrar</button></a>
         <a href="#" id="'. $row['product_id'] .'"  class="delbuttonPorcentaje " title="Borrar"><button class="btn btn-success btn-mini"> %2</button></a>

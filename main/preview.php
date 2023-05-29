@@ -166,12 +166,28 @@ window.onload=startclock;
           </div><!--/.well -->
         </div><!--/span-->
 		
+		<?php
+	
+	$resulta = $db->prepare("SELECT * FROM customer WHERE customer_name= :a");
+	$resulta->bindParam(':a', $cname);
+	$resulta->execute();
+	for($i=0; $rowa = $resulta->fetch(); $i++){
 
+	$address=$rowa['address'];
+	$contact=$rowa['contact'];
+	}
+	?>
 	<div class="span10">
 	<a href="sales.php?id=cash&invoice=<?php echo $finalcode ?>"><button class="btn btn-default"><i class="icon-arrow-left"></i> Back to Sales</button></a>
 <div class="pull-right" style="margin-right:100px;">
 		<a href="javascript:Clickheretoprint()" style="font-size:20px;"><button class="btn btn-success btn-large"><i class="icon-print"></i> Imprimir</button></a>
-		</div><br/><br/><br/><br/>
+		<a href="https://api.whatsapp.com/send?phone=54<?php echo $contact ?>" target="_blank" style="font-size:20px;">
+  <button class="btn btn-success btn-large" >
+    <i class="icon-phone-sign"></i> Whatsapp
+  </button>
+</a>
+
+	</div><br/><br/><br/><br/>
 
 
 <div class="content" id="content">
@@ -196,17 +212,7 @@ window.onload=startclock;
 	
 	
 	<div>
-	<?php
 	
-	$resulta = $db->prepare("SELECT * FROM customer WHERE customer_name= :a");
-	$resulta->bindParam(':a', $cname);
-	$resulta->execute();
-	for($i=0; $rowa = $resulta->fetch(); $i++){
-
-	$address=$rowa['address'];
-	$contact=$rowa['contact'];
-	}
-	?>
 	
 	
 	
@@ -400,5 +406,4 @@ window.onload=startclock;
 	
 </div>
 </div>
-
 
