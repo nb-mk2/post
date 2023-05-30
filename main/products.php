@@ -429,10 +429,11 @@ $(document).on('click', '.delbuttonPorcentaje', function() {
                // console.log(nuevoPrecio);
 
                 // Obtener la celda de precio actual
-                var celdaPrecio = row.find('td:eq(2)');
+                var celdaPrecio = row.find('td:eq(1)');
 
                 // Actualizar el valor mostrado en la celda
-                celdaPrecio.text(nuevoPrecio.toFixed(2));
+              
+                celdaPrecio.text('$ ' + nuevoPrecio.toFixed(1));
 
     
             }
